@@ -40,7 +40,6 @@
 //   connectDb();
 //   console.log("Server Started!");
 // });
-
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
@@ -57,14 +56,16 @@ import geminiResponse from "./gemini.js";
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 const app = express();
-app.use(cors({
-    origin: "https://virtualassistant-fronend-v50y.onrender.com",
-    credentials: true,
-  }),
-);
+const port = process.env.PORT || 5000;
 
-// ✅ Handle preflight requests
-app.options("*", cors());
+// ✅ CORS
+app.use(cors({
+  origin: "https://virtualassistant-fronend-v50y.onrender.com",
+  credentials: true,
+}));
+
+// ✅ FIXED (important)
+app.options("/*", cors());
 
 // Middlewares
 app.use(express.json());
@@ -74,7 +75,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 
-// ✅ Gemini route (fixed duplicate issue)
+// Gemini route
 app.get("/gemini", async (req, res) => {
   try {
     let prompt = req.query.prompt;

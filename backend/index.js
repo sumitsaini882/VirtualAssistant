@@ -57,28 +57,8 @@ import geminiResponse from "./gemini.js";
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 const app = express();
-<<<<<<< HEAD
-const port = process.env.PORT || 5000;
-
-// ✅ CORS FIX (IMPORTANT)
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://virtualassistant-fronend-v50y.onrender.com",
-];
-
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS not allowed"));
-      }
-    },
-=======
 app.use(cors({
     origin: "https://virtualassistant-fronend-v50y.onrender.com",
->>>>>>> c0a5ce159856aed42a37d64dd58346a52f914684
     credentials: true,
   }),
 );

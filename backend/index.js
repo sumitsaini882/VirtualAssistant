@@ -58,14 +58,11 @@ dns.setServers(["1.1.1.1", "8.8.8.8"]);
 const app = express();
 const port = process.env.PORT || 5000;
 
-// ✅ CORS
+// ✅ CORS (FINAL)
 app.use(cors({
   origin: "https://virtualassistant-fronend-v50y.onrender.com",
   credentials: true,
 }));
-
-// ✅ FIXED (important)
-app.options("/*", cors());
 
 // Middlewares
 app.use(express.json());
@@ -75,18 +72,18 @@ app.use(cookieParser());
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 
-// Gemini route
+// ✅ Gemini route (no duplicate)
 app.get("/gemini", async (req, res) => {
   try {
-    let prompt = req.query.prompt;
-    let data = await geminiResponse(prompt);
+    const prompt = req.query.prompt;
+    const data = await geminiResponse(prompt);
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });
   }
 });
 
-// Root route
+// ✅ Root route (single only)
 app.get("/", (req, res) => {
   res.send("Server Running 🚀");
 });

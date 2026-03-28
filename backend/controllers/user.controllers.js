@@ -20,43 +20,21 @@ export const getCurrentUser = async (req, res) => {
     return res.status(400).json({ message: "Get current User Error!" });
   }
 };
-
-// export const updateAssistant = async (req, res) => {
-//   try {
-//     const { assistantName, imageUrl } = req.body;
-//     let assistantImage;
-//     if (req.file) {
-//       assistantImage = await uploadOnCloudinary(req.file.path);
-//     } else {
-//       assistantImage = imageUrl;
-//     }
-
-//   const user = await User.findByIdAndUpdate(
-//   req.userId,
-//   { assistantName, assistantImage },
-//   { returnDocument: 'after' }, // ✅ Yeh naya tarika hai
-// ).select("-password");
-//     return res.status(200).json(user);
-//   } catch (error) {
-//     return res.status(400).json({ message: "Update Assistant  Error!" });
-//   }
-// };
 export const updateAssistant = async (req, res) => {
   try {
     const { assistantName, imageUrl } = req.body;
-    let assistantImage = imageUrl; // Default URL rakhein
+    let assistantImage = imageUrl; 
 
-    // Agar file upload hui hai (Multer se)
     if (req.file) {
       const uploadRes = await uploadOnCloudinary(req.file.path);
-      // Ensure karein ki aap Cloudinary ka secure_url save kar rahe hain
+      
       assistantImage = uploadRes?.secure_url || uploadRes; 
     }
 
     const user = await User.findByIdAndUpdate(
       req.userId,
       { assistantName, assistantImage },
-      { returnDocument: 'after' } // ❌ { new: true } ko replace kar diya (Warning Fix)
+      { returnDocument: 'after' } 
     ).select("-password");
 
     return res.status(200).json(user);
